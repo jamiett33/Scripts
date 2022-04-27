@@ -1,0 +1,12 @@
+#!/bin/bash
+###Backup 2 electric boogaloo###
+#Simple Backup script#
+
+read -a directories -r -p "Please enter full path of each directory you wish to backup, seperated by spaces."
+for index in "${directories[@]}"; do
+        source=$index
+        basename=$(basename $source)
+        destination=/home/pi/backups/${basename}-backup-$(date -I).tar.gz
+        tar -vc -gzip -f $destination $source
+done
+echo "backup complete."
