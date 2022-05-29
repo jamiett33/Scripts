@@ -1,47 +1,37 @@
 #! /bin/bash
-# Handbrake Script for queued conversion
+## Script for bulk handbrake conversion ##
 
-###########################################################
-#    Edit depending on directory you intend to convert    #
-#             Use full path names in variables            #
-###########################################################
 
-#### Variables #####
+# Initialise Variables #
 
-# Video Source Directory
-source="/directory"
+# Video source directory for grabbing names
+source="$(ls /home/jamie/500gb/handbrake_conversions/todo/)" # enter source directory after ls
 
-# Video Output Directory
-out="/directory"
+# Extra input for joining location and name strings
+input="/home/jamie/500gb/handbrake_conversions/todo"
 
-# Temp File Directory
-temp="/tmp/videos"
+# Video output directory
+out="/home/jamie/500gb/handbrake_conversions/complete"
 
-# Video Codec
+# Video Codec: x264 | x264_10bit | nvenc_h264 | x265 | x265_10bit | x265_12bit | nvenc_h265 | mpeg4 | mpeg2 | VP8 | VP9 | theora
 video="x265_10bit"
-#Video Options: x264 | x264_10bit | nvenc_h264 | x265 | x265_10bit | x265_12bit | nvenc_h265 | mpeg4 | mpeg2 | VP8 | VP9 | theora
 
-# Audio Codec
+# Audio Codec: none | av_aac | copy:aac | ac3 | copy:ac3 | eac3 | copy:eac3 | copy:truehd | copy:dts | copy:dtshd | copy:mp2 | mp3 | copy:mp3 | vorbis | flac16 | flac24 | copy:flac | opus | copy
 audio="flac16"
-#Audio Options: none | av_aac | copy:aac | ac3 | copy:ac3 | eac3 | copy:eac3 | copy:truehd | copy:dts | copy:dtshd | copy:mp2 | mp3 | copy:mp3 | vorbis | flac16 | flac24 | copy:flac | opus | copy
 
-# Subtitle Settings
+# Subtitle
 sub="--all-subtitles"
 
-
+# Container: av_mp4 | av_mkv | av_webm
+container="av_mp4"
 
 #### Start Script ####
-#clean up previous list
-find $temp -delete
 
-# List file names and dump to temp location
-ls $source >> $temp
+# Handbrake CLI #
+for i in $source
 
-# Handbrake Queue Conversion 
-for i in $(cat $temp)
+do
 
-do 
-
-HandBrakeCLI -i $source/$i -o $out/$i -e $video -q 20 -m  --encopts="gpu=0" –all-audio -E $audio $sub  && sleep 1m
+HandBrakeCLI -i $input/$i -o $out/$i -e $video -f $container -q 20.0 -m –all-audio -E $audio $sub  && sleep 1m
 
 done
