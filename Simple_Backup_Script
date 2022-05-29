@@ -1,13 +1,13 @@
 #!/bin/bash
-###Backup 2 electric boogaloo###
-### Jamie Twyman ###
-#Simple Backup script#
+# Backup 2 electric boogaloo #
+# Jamie Twyman 2022#
+# Simple Backup script V2 #
 
 read -a directories -r -p "Please enter full path of each directory you wish to backup, seperated by spaces."
 for index in "${directories[@]}"; do
         source=$index
         basename=$(basename $source)
-        destination=/home/pi/backups/${basename}-backup-$(date -I).tar.gz
+        destination=/home/pi/backups/${basename}-backup-$(date -I).tar.gz #Set backup location
         tar -vc -gzip -f $destination $source
 done
 echo "backup complete."
